@@ -39,8 +39,8 @@ rm -r erigon-${ERIGON_VERSION}
 
 if ! id "erigon" >/dev/null 2>&1; then
   sudo useradd --no-create-home --shell /bin/false erigon
-  sudo mkdir -p /var/lib/erigon
-  sudo chown -R erigon:erigon /var/lib/erigon
+  sudo mkdir -p ${ERIGON_DATA_DIR}
+  sudo chown -R erigon:erigon ${ERIGON_DATA_DIR}
 fi
 
 
@@ -58,8 +58,8 @@ rm lighthouse
 
 if ! id "lighthousebeacon" >/dev/null 2>&1; then
   sudo useradd --no-create-home --shell /bin/false lighthousebeacon
-  sudo mkdir -p /var/lib/lighthouse/beacon
-  sudo chown -R lighthousebeacon:lighthousebeacon /var/lib/lighthouse/beacon
+  sudo mkdir -p ${LIGHTHOUSE_DATA_DIR}/beacon
+  sudo chown -R lighthousebeacon:lighthousebeacon ${LIGHTHOUSE_DATA_DIR}
 fi
 
 
@@ -77,7 +77,7 @@ Type=simple
 Restart=always
 RestartSec=5
 ExecStart=/usr/local/bin/erigon \
-  --datadir=/var/lib/erigon \
+  --datadir=${ERIGON_DATA_DIR} \
   --rpc.gascap=50000000 \
   --http \
   --ws \
@@ -110,7 +110,7 @@ Restart=always
 RestartSec=5
 ExecStart=/usr/local/bin/lighthouse bn \
   --network mainnet \
-  --datadir /var/lib/lighthouse \
+  --datadir ${LIGHTHOUSE_DATA_DIR} \
   --http \
   --execution-endpoint http://localhost:8551 \
   --execution-jwt /var/lib/jwtsecret/jwt.hex \
